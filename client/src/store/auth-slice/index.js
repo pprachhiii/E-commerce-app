@@ -7,13 +7,13 @@ const initialState = {
   user: null,
   token: null,
 };
-
+const API_BASE_URL = "https://e-commerce-app-66qk.onrender.com";
 export const registerUser = createAsyncThunk(
   "/auth/register",
 
   async (formData) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/register`,
+      `${API_BASE_URL}/api/auth/register`,
       formData,
       {
         withCredentials: true,
@@ -29,7 +29,7 @@ export const loginUser = createAsyncThunk(
 
   async (formData) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/login`,
+      `${API_BASE_URL}/api/auth/login`,
       formData,
       {
         withCredentials: true,
@@ -45,7 +45,7 @@ export const logoutUser = createAsyncThunk(
 
   async () => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/auth/logout`,
+      `${API_BASE_URL}/api/auth/logout`,
       {},
       {
         withCredentials: true,
@@ -61,7 +61,7 @@ export const logoutUser = createAsyncThunk(
 
 //   async () => {
 //     const response = await axios.get(
-//       `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
+//       `${API_BASE_URL}/api/auth/check-auth`,
 //       {
 //         withCredentials: true,
 //         headers: {
@@ -79,16 +79,13 @@ export const checkAuth = createAsyncThunk(
   "/auth/checkauth",
 
   async (token) => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Cache-Control":
-            "no-store, no-cache, must-revalidate, proxy-revalidate",
-        },
-      }
-    );
+    const response = await axios.get(`${API_BASE_URL}/api/auth/check-auth`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Cache-Control":
+          "no-store, no-cache, must-revalidate, proxy-revalidate",
+      },
+    });
 
     return response.data;
   }
