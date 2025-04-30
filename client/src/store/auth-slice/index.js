@@ -7,7 +7,7 @@ const initialState = {
   user: null,
   token: null,
 };
-const API_BASE_URL = "https://e-commerce-app-66qk.onrender.com";
+
 export const registerUser = createAsyncThunk(
   "/auth/register",
 

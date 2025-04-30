@@ -1,60 +1,55 @@
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function CheckAuth({ isAuthenticated, user, children }) {
   const location = useLocation();
+  const navigate = useNavigate();
 
-  console.log(location.pathname, isAuthenticated);
+  // Wait for authentication state to load
+  useEffect(() => {
+    if (isAuthenticated === undefined) return; // If still loading, do nothing
 
-  if (location.pathname === "/") {
+    // Logic for redirecting based on authentication status and role
     if (!isAuthenticated) {
-      return <Navigate to="/auth/login" />;
+      if (
+        !["/login", "/register"].some((path) =>
+          location.pathname.includes(path)
+        )
+      ) {
+        navigate("/auth/login"); // Redirect unauthenticated users to login
+      }
     } else {
-      if (user?.role === "admin") {
-        return <Navigate to="/admin/dashboard" />;
-      } else {
-        return <Navigate to="/shop/home" />;
+      if (location.pathname === "/") {
+        // Redirect to the appropriate page based on the user's role
+        if (user?.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/shop/home");
+        }
+      }
+
+      // Prevent non-admin users from accessing admin routes
+      if (user?.role !== "admin" && location.pathname.includes("/admin")) {
+        navigate("/unauth-page");
+      }
+
+      // Prevent admin users from accessing shop routes
+      if (user?.role === "admin" && location.pathname.includes("/shop")) {
+        navigate("/admin/dashboard");
+      }
+
+      // Handle authenticated users trying to access login/register pages
+      if (
+        (location.pathname.includes("/login") ||
+          location.pathname.includes("/register")) &&
+        user?.role
+      ) {
+        navigate(user?.role === "admin" ? "/admin/dashboard" : "/shop/home");
       }
     }
-  }
+  }, [isAuthenticated, user, location, navigate]); // Dependencies for effect
 
-  if (
-    !isAuthenticated &&
-    !(
-      location.pathname.includes("/login") ||
-      location.pathname.includes("/register")
-    )
-  ) {
-    return <Navigate to="/auth/login" />;
-  }
-
-  if (
-    isAuthenticated &&
-    (location.pathname.includes("/login") ||
-      location.pathname.includes("/register"))
-  ) {
-    if (user?.role === "admin") {
-      return <Navigate to="/admin/dashboard" />;
-    } else {
-      return <Navigate to="/shop/home" />;
-    }
-  }
-
-  if (
-    isAuthenticated &&
-    user?.role !== "admin" &&
-    location.pathname.includes("admin")
-  ) {
-    return <Navigate to="/unauth-page" />;
-  }
-
-  if (
-    isAuthenticated &&
-    user?.role === "admin" &&
-    location.pathname.includes("shop")
-  ) {
-    return <Navigate to="/admin/dashboard" />;
-  }
-
+  // Render children if no redirect is needed
   return <>{children}</>;
 }
 

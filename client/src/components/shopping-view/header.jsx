@@ -72,17 +72,16 @@ function HeaderRightContent() {
   const dispatch = useDispatch();
 
   function handleLogout() {
-    // dispatch(logoutUser());
-    dispatch(resetTokenAndCredentials());
-    sessionStorage.clear();
-    navigate("/auth/login");
+    dispatch(resetTokenAndCredentials()); // Logout action to reset token and credentials
+    sessionStorage.clear(); // Clear session storage
+    navigate("/auth/login"); // Redirect to login page
   }
 
   useEffect(() => {
-    dispatch(fetchCartItems(user?.id));
-  }, [dispatch]);
-
-  console.log(cartItems, "sangam");
+    if (user?.id) {
+      dispatch(fetchCartItems(user.id)); // Fetch cart items only if user id is available
+    }
+  }, [dispatch, user?.id]);
 
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
@@ -101,11 +100,7 @@ function HeaderRightContent() {
         </Button>
         <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
-          cartItems={
-            cartItems && cartItems.items && cartItems.items.length > 0
-              ? cartItems.items
-              : []
-          }
+          cartItems={cartItems?.items || []} // Ensure cartItems is always an array
         />
       </Sheet>
 
@@ -113,7 +108,7 @@ function HeaderRightContent() {
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
             <AvatarFallback className="bg-black text-white font-extrabold">
-              {user?.userName[0].toUpperCase()}
+              {user?.userName[0]?.toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
