@@ -10,6 +10,7 @@ function ProductImageUpload({
   imageFile,
   setImageFile,
   imageLoadingState,
+  uploadedImageUrl,
   setUploadedImageUrl,
   setImageLoadingState,
   isEditMode,

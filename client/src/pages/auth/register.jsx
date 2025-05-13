@@ -60,6 +60,14 @@ function AuthRegister() {
         setFormData={setFormData}
         onSubmit={onSubmit}
       />
+
+      {/* temporary message for the user */}
+      <div className="text-center text-sm text-muted mt-4">
+        <p>
+          If you're not taken to the next page, please refresh the page to
+          continue.
+        </p>
+      </div>
     </div>
   );
 }

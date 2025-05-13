@@ -23,11 +23,12 @@ function AuthLogin() {
       if (data?.payload?.success) {
         toast({
           title: data?.payload?.message,
+          variant: "success", // Ensure success variant is used
         });
       } else {
         toast({
           title: data?.payload?.message,
-          variant: "destructive",
+          variant: "destructive", // Ensure failure variant is used
         });
       }
     });
@@ -40,7 +41,7 @@ function AuthLogin() {
           Sign in to your account
         </h1>
         <p className="mt-2">
-          Don't have an account
+          Don't have an account?
           <Link
             className="font-medium ml-2 text-primary hover:underline"
             to="/auth/register"
@@ -56,6 +57,14 @@ function AuthLogin() {
         setFormData={setFormData}
         onSubmit={onSubmit}
       />
+
+      {/* temporary message for the user */}
+      <div className="text-center text-sm text-muted mt-4">
+        <p>
+          If you're not taken to the next page, please refresh the page to
+          continue.
+        </p>
+      </div>
     </div>
   );
 }
