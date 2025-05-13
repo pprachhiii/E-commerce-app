@@ -5,6 +5,7 @@ import { loginUser } from "@/store/auth-slice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { AlertTriangle } from "lucide-react";
 
 const initialState = {
   email: "",
@@ -58,12 +59,10 @@ function AuthLogin() {
         onSubmit={onSubmit}
       />
 
-      {/* temporary message for the user */}
-      <div className="text-center text-sm text-muted mt-4">
-        <p>
-          If you're not taken to the next page, please refresh the page to
-          continue.
-        </p>
+      <div className="flex items-center gap-2 text-sm text-destructive border border-destructive rounded-md p-3 mt-4 bg-destructive/10">
+        {" "}
+        <AlertTriangle className="w-4 h-4" />
+        <p className="text-sm">Didn’t get logged in? Try reloading the page.</p>
       </div>
     </div>
   );
